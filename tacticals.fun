@@ -2,6 +2,9 @@ functor Tacticals (Lcf : LCF) : TACTICALS =
 struct
   open Lcf
 
+  fun FAIL g =
+    raise Fail "FAIL"
+
   fun ID g =
     ([g], fn [D] => D | _ => raise Fail "ID")
 
