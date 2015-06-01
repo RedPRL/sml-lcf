@@ -20,6 +20,6 @@ sig
   include TACTICALS
 
   val PROGRESS : tactic -> tactic
-  val EXHAUST : tactic -> tactic
+  val LIMIT : tactic -> tactic
 end
 

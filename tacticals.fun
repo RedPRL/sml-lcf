@@ -79,5 +79,5 @@ struct
         raise Fail "PROGRESS"
     end
 
-  val EXHAUST = REPEAT o PROGRESS
+  val LIMIT = REPEAT o PROGRESS
 end
