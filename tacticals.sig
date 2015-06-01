@@ -15,3 +15,11 @@ sig
   val TRY : tactic -> tactic
 end
 
+signature PROGRESS_TACTICALS =
+sig
+  include TACTICALS
+
+  val PROGRESS : tactic -> tactic
+  val EXHAUST : tactic -> tactic
+end
+

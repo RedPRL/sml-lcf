@@ -1,7 +1,10 @@
 Library
   signature LCF
   signature TACTICALS
+  signature LCF_APART
+  signature PROGRESS_TACTICALS
   functor Tacticals
+  functor ProgressTacticals
 is
   $SMACKAGE/cmlib/v1/cmlib.cm
   lcf.sig

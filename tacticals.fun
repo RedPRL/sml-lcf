@@ -62,3 +62,22 @@ struct
 
   fun REPEAT tac = TRY (THEN_LAZY (tac, fn () => TRY (REPEAT tac)))
 end
+
+functor ProgressTacticals (Lcf : LCF_APART) : PROGRESS_TACTICALS =
+struct
+  structure Tacticals = Tacticals (Lcf)
+  open Tacticals
+
+  fun PROGRESS tac g =
+    let
+      val result as (subgoals, validation) = tac g
+      val made_progress = foldl (fn (g', b) => Lcf.goal_apart (g', g) andalso b) true subgoals
+    in
+      if made_progress then
+        result
+      else
+        raise Fail "PROGRESS"
+    end
+
+  val EXHAUST = REPEAT o PROGRESS
+end
