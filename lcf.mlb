@@ -1,0 +1,15 @@
+$(SML_LIB)/basis/basis.mlb
+
+local
+  list_util.sml
+  lcf.sig
+  tacticals.sig
+  tacticals.fun
+in
+  signature LCF
+  signature TACTICALS
+  signature LCF_APART
+  signature PROGRESS_TACTICALS
+  functor Tacticals
+  functor ProgressTacticals
+end
