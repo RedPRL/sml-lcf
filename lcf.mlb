@@ -1,10 +1,10 @@
 $(SML_LIB)/basis/basis.mlb
 
 local
-  list_util.sml
-  lcf.sig
-  tacticals.sig
-  tacticals.fun
+  src/list_util.sml
+  src/lcf.sig
+  src/tacticals.sig
+  src/tacticals.fun
 in
   signature LCF
   signature TACTICALS

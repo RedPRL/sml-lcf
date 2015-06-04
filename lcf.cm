@@ -7,7 +7,7 @@ Library
   functor ProgressTacticals
 is
   $/basis.cm
-  lcf.sig
-  tacticals.sig
-  tacticals.fun
-  list_util.sml
+  src/lcf.sig
+  src/tacticals.sig
+  src/tacticals.fun
+  src/list_util.sml
