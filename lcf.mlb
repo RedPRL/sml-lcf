@@ -5,11 +5,17 @@ local
   src/lcf.sig
   src/tacticals.sig
   src/tacticals.fun
+  src/tactic_annotation.sig
+  src/annotated_lcf.sig
+  src/annotated_lcf.fun
 in
   signature LCF
   signature TACTICALS
   signature LCF_APART
   signature PROGRESS_TACTICALS
+  signature TACTIC_ANNOTATION
+  signature ANNOTATED_LCF
+  functor AnnotatedLcf
   functor Tacticals
   functor ProgressTacticals
 end
