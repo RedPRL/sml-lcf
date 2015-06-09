@@ -1,20 +1,15 @@
 signature ANNOTATED_LCF =
 sig
-  structure Lcf : LCF
-  structure TacticAnnotation : TACTIC_ANNOTATION
+  include LCF
 
   (* an annotated tactic *)
-  type tactic
+  type metadata
 
   (* construct an annotated tactic *)
-  val make : TacticAnnotation.metadata * Lcf.tactic -> tactic
-
-  (* compile an annotated tactic to an LCF tactic *)
-  val compile : tactic * TacticAnnotation.annotation -> Lcf.tactic
+  val annotate: metadata * tactic -> tactic
 
   exception RefinementFailed of
     {error : exn,
-     goal : Lcf.goal,
-     metadata : TacticAnnotation.metadata,
-     annotation : TacticAnnotation.annotation}
+     goal : goal,
+     metadata : metadata}
 end
