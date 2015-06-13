@@ -11,7 +11,7 @@ struct
   fun map_shape [] _ _ =  []
     | map_shape (n1::nums) (f1::funcs) args =
         let
-          val (f1_args,args') = ListUtil.split_at n1 args
+          val (f1_args,args') = ListUtil.splitAt n1 args
         in
           f1 f1_args :: map_shape nums funcs args'
         end
@@ -71,7 +71,7 @@ struct
   fun PROGRESS tac g =
     let
       val result as (subgoals, validation) = tac g
-      val made_progress = foldl (fn (g', b) => Lcf.goal_apart (g', g) andalso b) true subgoals
+      val made_progress = foldl (fn (g', b) => Lcf.goalApart (g', g) andalso b) true subgoals
     in
       if made_progress then
         result

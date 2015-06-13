@@ -1,6 +1,6 @@
 structure ListUtil :
 sig
-  val split_at : int -> 'a list -> 'a list * 'a list
+  val splitAt : int -> 'a list -> 'a list * 'a list
 end =
 struct
   local
@@ -13,12 +13,13 @@ struct
           (x::xs', xs'')
         end
   in
-    fun split_at n ls =
-      if n < 0
-      then raise Subscript
-      else if n = 0
-      then ([], ls)
-      else go n ls
+    fun splitAt n ls =
+      if n < 0 then
+        raise Subscript
+      else
+        if n = 0 then ([], ls)
+      else
+        go n ls
   end
 end
 
