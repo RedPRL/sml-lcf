@@ -13,6 +13,11 @@ sig
   val ORELSE : tactic * tactic -> tactic
   val ORELSE_LAZY : tactic * (unit -> tactic) -> tactic
   val TRY : tactic -> tactic
+
+  (* TRACE s will print out s to the console when run and then behave
+   * like ID
+   *)
+  val TRACE : string -> tactic
 end
 
 signature PROGRESS_TACTICALS =
