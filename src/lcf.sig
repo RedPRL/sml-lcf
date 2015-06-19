@@ -1,15 +1,16 @@
-(* This signature should by the user of the logic. It requires them
- * to specify the structure of targets of the tactics (what they should
- * operate on, as well as what counts as evidence for having proven one.
+(* This signature should implemented by the logic in order to use this
+ * libraries machinery. It requires them to specify the structure of
+ * goals as well as what counts as evidence that a goal is proven.
  *
  * The tactics library is completely agnostic to how the underlying goals
  * and evidence are structured.
  *)
 signature LCF =
 sig
-  (* The type of the target to prove *)
   type goal
-  (* The type of evidence that we've succeeded in proving a goal *)
+  (* The type of evidence (justification) that we've succeeded
+   * in proving a goal
+   *)
   type evidence
 
   (* A validation is the proof a tactic returns of its correctness
@@ -25,9 +26,6 @@ sig
    *)
   type tactic = goal -> goal list * validation
 
-  (* The user must provide a serialization function for goals in
-   * order to support XXXX WHY XXX
-   *)
   val goalToString : goal -> string
 end
 
@@ -38,6 +36,9 @@ signature LCF_APART =
 sig
   include LCF
 
-  (* Are two goals different in a meaningful sense. *)
+  (* goalApart should return true if two goals are different.
+   * The exact meaning of different is left up to the implementer
+   * of this signature.
+   *)
   val goalApart : goal * goal -> bool
 end

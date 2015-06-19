@@ -1,6 +1,6 @@
 (* See tacticals.sig for a description of the types and
  * effects of these tactics. This structure only contains
- *  documentation on how these tactics are implemented.
+ * documentation on how these tactics are implemented.
  *)
 functor Tacticals (Lcf : LCF) : TACTICALS =
 struct
@@ -9,7 +9,7 @@ struct
   fun FAIL g =
     raise Fail "FAIL"
 
-  (* Note here that ID's validation may through an
+  (* Note here that ID's validation may throw an
    * exception if is applied to the wrong number of
    * subgoals
    *)

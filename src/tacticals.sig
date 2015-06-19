@@ -1,10 +1,7 @@
 (* A collection of common, system agnostic tactics. This is the
- * payoff for types implementing LCF. These tactics can be used
+ * payoff for structures implementing LCF. These tactics can be used
  * to compositionally build up sophisticated logic programs from
  * collection of small, system-dependent tactics.
- *
- * In order to actually use these, take the LCF ascribing module
- * describing your system and feed it into the Tacticals functor.
  *)
 signature TACTICALS =
 sig
@@ -28,7 +25,7 @@ sig
 
   (* THENL (t1, t2s) runs t1 and runs the first element of t2s
    * on the first subgoal produced, the second element on the second
-   *  subgoal, and so on and so on and so on.
+   * subgoal, and so on and so on and so on.
    *
    * If there is a mismatch between the number of tactics supplied and
    * the number of subgoals created, the tactic will fail.
@@ -47,10 +44,10 @@ sig
   val THENL_LAZY : tactic * (unit -> tactic list) -> tactic
 
   (* REPEAT t will run a tactic over and over again. It can be thought
-   * of THEN (t, THEN (t, (Then t, ...)))
+   * of THEN (t, THEN (t, (Then t, ...))).
    *
    * It will halt either when t fails or when it has run out of subgoals
-   * to continue to do work on. This tactic can never fail, if the tactic
+   * to continue to do work on. This tactic can never fail; if the tactic
    * ever fails it will merely revert the goal to the state it was in
    * before REPEAT t was run, behaving as ID.
    *)
@@ -61,7 +58,7 @@ sig
    *)
   val FAIL : tactic
 
-  (* ORELSE lets a script handling a tactic fails. It will run the first
+  (* ORELSE lets a script handling a tactic fail. It will run the first
    *  tactic and it if fails, it will revert to the original goal and
    * run the second tactic as if the first had never run.
    *
