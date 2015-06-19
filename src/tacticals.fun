@@ -61,6 +61,8 @@ struct
     ORELSE(tac, ID)
 
   fun REPEAT tac = TRY (THEN_LAZY (tac, fn () => TRY (REPEAT tac)))
+
+  fun TRACE s = THEN_LAZY (ID, fn () => (print (s ^ "\n"); ID))
 end
 
 functor ProgressTacticals (Lcf : LCF_APART) : PROGRESS_TACTICALS =
