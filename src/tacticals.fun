@@ -137,7 +137,7 @@ struct
        * any difference has been made. This will fail if *any*
        * of the generated subgoals don't change with respect to original.
        *)
-      val made_progress = foldl (fn (g', b) => Lcf.goalApart (g', g) andalso b) true subgoals
+      val made_progress = List.all (fn g' => Lcf.goalApart (g', g)) subgoals
     in
       if made_progress then
         result
