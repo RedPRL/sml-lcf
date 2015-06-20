@@ -1,5 +1,9 @@
 structure ListUtil :
 sig
+  (* Given a list, break it into two sublists at a
+   * particular index. If the index is too large for
+   * supplied list this raises the Subscript exception
+   *)
   val splitAt : int -> 'a list -> 'a list * 'a list
 end =
 struct
@@ -22,4 +26,3 @@ struct
         go n ls
   end
 end
-
