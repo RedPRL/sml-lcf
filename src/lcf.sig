@@ -1,5 +1,5 @@
 (* This signature should implemented by the logic in order to use this
- * libraries machinery. It requires them to specify the structure of
+ * library's machinery. It requires them to specify the structure of
  * goals as well as what counts as evidence that a goal is proven.
  *
  * The tactics library is completely agnostic to how the underlying goals
@@ -8,6 +8,7 @@
 signature LCF =
 sig
   type goal
+
   (* The type of evidence (justification) that we've succeeded
    * in proving a goal
    *)

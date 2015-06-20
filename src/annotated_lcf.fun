@@ -1,8 +1,7 @@
 (* Given any LCF system we can trivially annotate its tactics.  This
  * lets us add information to when tactic fails (specifically the
  * exception it throws). This will let us distinguish failing tactics
- * and present error informations to a user beyond "TACTIC FAILED (you
- * jerk!)".
+ * and present error information such a source locations to the user.
  *)
 functor AnnotatedLcf
   (structure Lcf : LCF
