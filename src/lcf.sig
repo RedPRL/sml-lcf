@@ -25,8 +25,6 @@ sig
    * evidence for the input goal
    *)
   type tactic = goal -> goal list * validation
-
-  val goalToString : goal -> string
 end
 
 (* If goals have an apartness relation, then we may express
