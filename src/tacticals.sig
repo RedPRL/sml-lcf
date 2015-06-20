@@ -6,6 +6,7 @@
 signature TACTICALS =
 sig
   type tactic
+  type goal
 
   (* The identity tactic. This produces one subgoal: the
    * original goal. It will always succeed but never
@@ -77,6 +78,13 @@ sig
    * simply leave the goal alone. This tactic is idempotent.
    *)
   val TRY : tactic -> tactic
+
+  exception RemainingSubgoals of goal list
+
+  (* COMPLETE t requires that t suffice to discharge the goal (i.e. it produces
+   * no subgoals); in case this condition fails, ReminaingSubgoals is thrown.
+   *)
+  val COMPLETE : tactic -> tactic
 
   (* TRACE s will print out s to the console when run and then behave
    * like ID

@@ -123,6 +123,17 @@ struct
 
   fun REPEAT tac = TRY (THEN_LAZY (tac, fn () => TRY (REPEAT tac)))
 
+  exception RemainingSubgoals of goal list
+
+  fun COMPLETE tac g =
+    let
+      val result as (subgoals, _) = tac g
+    in
+      case subgoals of
+           [] => result
+         | _ => raise RemainingSubgoals subgoals
+    end
+
   fun TRACE s = THEN_LAZY (ID, fn () => (print (s ^ "\n"); ID))
 end
 
