@@ -73,6 +73,9 @@ struct
           (x :: hd, y, tl)
         end
 
+    (* break (n, xs) = (ys, zs) where xs = ys @ zs and ys had n elements.
+     * if xs didn't have n elements to start this raises Subscript
+     *)
     fun break (0, xs) = ([], xs)
       | break (_, []) = raise Subscript
       | break (n, x :: xs) =
@@ -125,19 +128,24 @@ struct
       case tac1 g of
            ([], validation1) => ([], validation1)
          | (subgoals1, validation1) =>
-             let
-               val (hd, focus, tl) = split (i,  subgoals1)
-               val (subgoals2, validation2) = tac2 () focus
-               fun validation evidence =
-                 let
-                   val (first, rest) = break (i, evidence)
-                   val (second, third) = break (List.length subgoals2, rest)
-                 in
-                   validation1 (first @ [validation2 second] @ third)
-                 end
-             in
-               (hd @ subgoals2 @ tl, validation)
-             end
+           let
+             (* First let's grab the goal we're focused on *)
+             val (hd, focus, tl) = split (i,  subgoals1)
+             val (subgoals2, validation2) = tac2 () focus
+             (* The validation is a stripped down [refine]. It breaks apart
+              * the evidence list, applies the validation from tac2 and then
+              * applies the original validation1
+              *)
+             fun validation evidence =
+               let
+                 val (first, rest) = break (i, evidence)
+                 val (second, third) = break (List.length subgoals2, rest)
+               in
+                 validation1 (first @ [validation2 second] @ third)
+               end
+           in
+             (hd @ subgoals2 @ tl, validation)
+           end
   end
 
   fun THENL (tac1, tacn) =
