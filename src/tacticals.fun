@@ -155,7 +155,7 @@ struct
     THEN_LAZY (tac1, fn () => tac2)
 
   fun THENF (tac1, i, tac2) =
-      THENF_LAZY (tac1, i, fn () => tac2)
+    THENF_LAZY (tac1, i, fn () => tac2)
 
   (* TODO: Should ORELSE_LAZY have some idea of
    * how to keep track of failing tactics to present
