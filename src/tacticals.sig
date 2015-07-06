@@ -44,7 +44,17 @@ sig
    *)
   val THENL_LAZY : tactic * (unit -> tactic list) -> tactic
 
+  (* THENF (t1, i, t2) runs t1 and then runs t2 on the ith subgoal
+   * produced by t1. All the other subgoals are left untouched and
+   * if t2 produces any subgoals of its own they are merged into the
+   * list of remaining subgoals. If t1 produces subgoals but doesn't produce
+   * at least i of them this fails.
+   *)
   val THENF : tactic * int * tactic -> tactic
+
+  (* This behaves as THENF does but will not evaluate the supplied tactic
+   * if t1 doesn't produce any subgoals.
+   *)
   val THENF_LAZY : tactic * int * (unit -> tactic) -> tactic
 
   (* REPEAT t will run a tactic over and over again. It can be thought
