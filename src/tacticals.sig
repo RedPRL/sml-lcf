@@ -44,6 +44,9 @@ sig
    *)
   val THENL_LAZY : tactic * (unit -> tactic list) -> tactic
 
+  val THENF : tactic * int * tactic -> tactic
+  val THENF_LAZY : tactic * int * (unit -> tactic) -> tactic
+
   (* REPEAT t will run a tactic over and over again. It can be thought
    * of THEN (t, THEN (t, (Then t, ...))).
    *
