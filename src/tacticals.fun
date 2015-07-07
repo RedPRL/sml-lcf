@@ -58,6 +58,32 @@ struct
       (List.concat subgoals,
        supervalidation o
          map_shape (map length subgoals) validations)
+
+    (* split (n, xs) = (hd, x, tl) where x is the nth element of xs and hd
+     * contains the n - 1 preceding elements and tl contains the rest of the
+     * list. If the list doesn't contain enough elements subscript is raised
+     * instead.
+     *)
+    fun split (_, []) = raise Subscript
+      | split (0, x :: xs) = ([], x, xs)
+      | split (n, x :: xs) =
+        let
+          val (hd, y, tl) = split (n - 1, xs)
+        in
+          (x :: hd, y, tl)
+        end
+
+    (* break (n, xs) = (ys, zs) where xs = ys @ zs and ys had n elements.
+     * if xs didn't have n elements to start this raises Subscript
+     *)
+    fun break (0, xs) = ([], xs)
+      | break (_, []) = raise Subscript
+      | break (n, x :: xs) =
+        let
+          val (hd, tl) = break (n - 1, xs)
+        in
+          (x :: hd, tl)
+        end
   in
     (* The THEN* family of tactics are all implemented in terms of
      * THENL_LAZY and THENL.
@@ -68,20 +94,20 @@ struct
            (* If there are no subgoals, just return the validation *)
            ([], validation1) => ([], validation1)
          | (subgoals1, validation1) =>
-             let
-               (* We recursively apply each tactic to the list of subgoals
-                * If they don't match this throws an exception. We then
-                * separate all the new subgoals and all the new validations
-                *)
-               val (subgoals2, validations2) =
+           let
+             (* We recursively apply each tactic to the list of subgoals
+              * If they don't match this throws an exception. We then
+              * separate all the new subgoals and all the new validations
+              *)
+             val (subgoals2, validations2) =
                  ListPair.unzip (ListPair.mapEq (fn (f,x) => f x) (tacn (), subgoals1))
-             in
-               (* We the use refine to glue together all the validations and
-                * subgoals so that evidence is "properly propagated" up the
-                * tree of subgoals
-                *)
-               refine (validation1, subgoals2, validations2)
-             end
+           in
+             (* We the use refine to glue together all the validations and
+              * subgoals so that evidence is "properly propagated" up the
+              * tree of subgoals
+              *)
+             refine (validation1, subgoals2, validations2)
+           end
 
     fun THEN_LAZY (tac1, tac2) g =
       case tac1 g of
@@ -97,6 +123,29 @@ struct
              in
                refine (validation1, subgoals2, validations2)
              end
+
+    fun THENF_LAZY (tac1, i, tac2 : unit -> tactic) : tactic = fn g =>
+      case tac1 g of
+           ([], validation1) => ([], validation1)
+         | (subgoals1, validation1) =>
+           let
+             (* First let's grab the goal we're focused on *)
+             val (hd, focus, tl) = split (i,  subgoals1)
+             val (subgoals2, validation2) = tac2 () focus
+             (* The validation is a stripped down [refine]. It breaks apart
+              * the evidence list, applies the validation from tac2 and then
+              * applies the original validation1
+              *)
+             fun validation evidence =
+               let
+                 val (first, rest) = break (i, evidence)
+                 val (second, third) = break (List.length subgoals2, rest)
+               in
+                 validation1 (first @ [validation2 second] @ third)
+               end
+           in
+             (hd @ subgoals2 @ tl, validation)
+           end
   end
 
   fun THENL (tac1, tacn) =
@@ -104,6 +153,9 @@ struct
 
   fun THEN (tac1, tac2) =
     THEN_LAZY (tac1, fn () => tac2)
+
+  fun THENF (tac1, i, tac2) =
+    THENF_LAZY (tac1, i, fn () => tac2)
 
   (* TODO: Should ORELSE_LAZY have some idea of
    * how to keep track of failing tactics to present
