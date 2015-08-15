@@ -105,6 +105,14 @@ sig
   val TRACE : string -> tactic
 end
 
+signature TRANSFORMATIONAL_TACTICALS =
+sig
+  type tactic
+
+  (* Run a tactic, but prune out redundant subgoals *)
+  val PRUNE : tactic -> tactic
+end
+
 signature PROGRESS_TACTICALS =
 sig
   type tactic
