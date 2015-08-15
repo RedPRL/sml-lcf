@@ -107,7 +107,7 @@ end
 
 signature PROGRESS_TACTICALS =
 sig
-  include TACTICALS
+  type tactic
 
   (* PROGRESS t runs t on the goal. If t produces some change*
    * in the goal or fails it behaves exactly as t. If t "succeeds"
