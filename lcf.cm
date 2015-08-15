@@ -3,12 +3,14 @@ Library
   signature TACTICALS
   signature LCF_APART
   signature PROGRESS_TACTICALS
+  signature TRANSFORMATIONAL_TACTICALS
 
   signature ANNOTATED_LCF
   functor AnnotatedLcf
 
   functor Tacticals
   functor ProgressTacticals
+  functor TransformationalTacticals
 is
   $/basis.cm
   src/lcf.sig
