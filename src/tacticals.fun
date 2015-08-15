@@ -219,7 +219,7 @@ struct
                    case Int.compare (j, i) of
                         EQUAL => i
                       | LESS => alpha j
-                      | GREATER => alpha j - 1)
+                      | GREATER => alpha (j - 1))
       val (xs', alpha) = go xs ([], fn i => i)
     in
       (xs', fn ys => List.tabulate (length xs, fn i => List.nth (ys, alpha i)))
