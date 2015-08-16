@@ -73,17 +73,6 @@ struct
           (x :: hd, y, tl)
         end
 
-    (* break (n, xs) = (ys, zs) where xs = ys @ zs and ys had n elements.
-     * if xs didn't have n elements to start this raises Subscript
-     *)
-    fun break (0, xs) = ([], xs)
-      | break (_, []) = raise Subscript
-      | break (n, x :: xs) =
-        let
-          val (hd, tl) = break (n - 1, xs)
-        in
-          (x :: hd, tl)
-        end
   in
     (* The THEN* family of tactics are all implemented in terms of
      * THENL_LAZY and THENL.
@@ -138,8 +127,8 @@ struct
               *)
              fun validation evidence =
                let
-                 val (first, rest) = break (i, evidence)
-                 val (second, third) = break (List.length subgoals2, rest)
+                 val (first, rest) = ListUtil.splitAt i evidence
+                 val (second, third) = ListUtil.splitAt (List.length subgoals2) rest
                in
                  validation1 (first @ [validation2 second] @ third)
                end
