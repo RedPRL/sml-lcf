@@ -13,7 +13,9 @@ in
   signature LCF_APART
   signature PROGRESS_TACTICALS
   signature ANNOTATED_LCF
+  signature TRANSFORMATIONAL_TACTICALS
   functor AnnotatedLcf
   functor Tacticals
   functor ProgressTacticals
+  functor TransformationalTacticals
 end

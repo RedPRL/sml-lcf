@@ -178,6 +178,51 @@ struct
   fun TRACE s = THEN_LAZY (ID, fn () => (print (s ^ "\n"); ID))
 end
 
+functor TransformationalTacticals (Lcf : LCF_APART) : TRANSFORMATIONAL_TACTICALS =
+struct
+  open Lcf
+  exception XX
+
+  local
+    fun go i ([], x) = NONE
+      | go i (y::xs, x) =
+          if goalApart (x,y) then
+            go (i + 1) (xs, x)
+          else
+            SOME i
+  in
+    val findIndex = go 0
+  end
+
+  type 'a endo = 'a ->'a
+  type ev_deform = evidence list endo
+
+  fun prune (xs : goal list) : goal list * ev_deform =
+    let
+      fun go [] (R, alpha) = (R, alpha)
+        | go (y::ys) (R, alpha) =
+          case findIndex (R, y) of
+               NONE => go ys (R @ [y], alpha)
+             | SOME i =>
+                 go ys (R, fn j =>
+                   case Int.compare (j, i) of
+                        EQUAL => i
+                      | LESS => alpha j
+                      | GREATER => alpha (j - 1))
+      val (xs', alpha) = go xs ([], fn i => i)
+    in
+      (xs', fn ys => List.tabulate (length xs, fn i => List.nth (ys, alpha i)))
+    end
+
+  fun PRUNE tac g =
+    let
+      val (subgoals, validation) = tac g
+      val (subgoals', transform) = prune subgoals
+    in
+      (subgoals', validation o transform)
+    end
+end
+
 functor ProgressTacticals (Lcf : LCF_APART) : PROGRESS_TACTICALS =
 struct
   structure Tacticals = Tacticals (Lcf)
